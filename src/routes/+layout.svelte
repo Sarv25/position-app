@@ -1,8 +1,10 @@
 <script>
-    import '../app.postcss'
-    import { base } from '$app/paths'
+    import '../app.postcss' // DoNotChange
+    import { base } from '$app/paths' // DoNotChange
 </script>
 
+<!-- Header -->
+<!-- HTML <a href="{base}/"></a> tag for routing -->
 <div class="navbar bg-base-300">
     <a
         class="btn btn-ghost text-xl"
@@ -18,6 +20,9 @@
     </a>
 </div>
 
-<main class="max-w-[1920px] container mx-auto space-y-4 md:m-4">
+<!-- Main content -->
+<!-- Content is inserted at <slot /> -->
+<!-- DoNotChange -->
+<main class="max-w-[1920px] container mx-auto pt-4">
     <slot />
 </main>

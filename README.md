@@ -17,8 +17,9 @@ This project was created using [`create-svelte`](https://github.com/sveltejs/kit
 1. This project uses JavaScript with type checking **disabled** to avoid excessive type engineering. This, however, leaves the application vulnerable to type-related errors. If you are a serious web developer, consider enabling JSDoc or using TypeScript for type checking.
 2. Most of the information you will need for development can be found in the documentations of the involved libraries linked above.
 3. Eslint is enabled by default, which will perform syntax and format checking. To take advantage of automatic formatting, use VSCode.
-4. In some browsers, getting the current location can be quite slow. Firefox seems to be the most responsive.
-5. Altitude and accuracy information from the Geolocation API is only available on mobile devices. On computers, only the longitude and latitude are available.
+4. Lines with the comment `\\ DoNotChange` should not be modified, unless you know what you are doing.
+5. In some browsers, getting the current location can be quite slow or forbidden. Firefox seems to be the most stable.
+6. Altitude and accuracy information from the Geolocation API is only available on mobile devices. On computers, only the longitude and latitude are available.
 
 ## Prerequisites
 
@@ -61,7 +62,9 @@ This project was created using [`create-svelte`](https://github.com/sveltejs/kit
 
 ## Deploying
 
-1. Edit `gh-pages-deploy.sh` and change `zjjdes` in line 14 to your GitHub username.
-2. Build and deploy by running `pnpm run deploy`.
-3. Only after the first deployment, go to the repository settings on GitHub, then to the Pages tab. Select the `gh-pages` branch as the publishing source and click on Save.
-4. Your web application will be available at _https://<your_username>.github.io/position-app/_ **after a few minutes**.
+1. Edit `gh-pages-deploy.sh` (Linux & Mac) or `gh-pages-deploy.bat` (Windows) and change `zjjdes` in the repository address to your GitHub username.
+2. If you are using Windows, change `"deploy": "sh gh-pages-deploy.sh"` in `package.json` to `"deploy": "cmd /c gh-pages-deploy.bat"`.
+3. Build and deploy by running `pnpm run deploy`.
+   - If deployment does not work, copy and run the content of the `gh-pages-deploy` script line by line.
+4. Only after the first deployment, go to the repository settings on GitHub, then to the Pages tab. Select the `gh-pages` branch as the publishing source and click on Save.
+5. Your web application will be available at _https://<your_username>.github.io/position-app/_ **after a few minutes**.

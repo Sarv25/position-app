@@ -62,8 +62,8 @@
     // Geolocation API related
     const geolocationOptions = {
         enableHighAccuracy: true,
-        timeout: 5000, // milliseconds
-        maximumAge: 60 * 60 * 1000, // milliseconds
+        timeout: 10000, // milliseconds
+        maximumAge: 0, // milliseconds, 0 disables cached positions
     }
     let getPosition = false
     let success = false
@@ -166,7 +166,7 @@
             options={geolocationOptions}
             bind:position
             let:loading
-            bind:success={success}
+            bind:success
             let:error
             let:notSupported
         >

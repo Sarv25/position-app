@@ -60,20 +60,26 @@
     let bounds = getMapBounds(markers)
 
     // Geolocation API related
+    const geolocationOptions = {
+        enableHighAccuracy: true,
+        timeout: 5000, // milliseconds
+        maximumAge: 60 * 60 * 1000, // milliseconds
+    }
     let getPosition = false
-    let positionSuccess = false
+    let success = false
     let position = {}
     let coords = []
+    let detail = {}
 
     /**
      * $: indicates a reactive statement, meaning that this block of code is
      * executed whenever the variable used as the condition changes its value
      *
-     * In this case: whenever positionSuccess is set to true, a Position object
+     * In this case: whenever success is set to true, a Position object
      * has been successfully obtained. Immediately update the relevant variables
      */
     $: {
-        if (positionSuccess) {
+        if (success) {
             coords = [position.coords.longitude, position.coords.latitude]
             markers = [
                 ...markers,
@@ -86,7 +92,7 @@
 
             // reset the flags
             getPosition = false
-            positionSuccess = false
+            success = false
         }
     }
 
@@ -135,8 +141,12 @@
 </script>
 
 <!-- Everything after <script> will be HTML for rendering -->
+
+<!-- This section demonstrates how to get the current user location -->
 <div class="flex flex-col h-[calc(100vh-80px)] w-full">
-    <div class="mx-4">
+    <div class="mx-4 text-center">
+        <h1 class="font-bold">Click button to get a one-time current position</h1>
+
         <!-- on:click declares what to do when the button is clicked -->
         <!-- In the HTML part, {} tells the framework to treat what's inside as code (variables or functions), instead of as strings -->
         <!-- () => {} is an arrow function, almost equivalent to function foo() {} -->
@@ -148,11 +158,15 @@
         </button>
 
         <!-- <Geolocation> tag is used to access the Geolocation API -->
+        <!-- {getPosition} is equivalent to getPosition={getPosition} -->
+        <!-- bind:variable associates the parameter with the variable with the same name declared in <script> reactively -->
+        <!-- let:variable creates a variable for use from the component's return -->
         <Geolocation
             {getPosition}
+            options={geolocationOptions}
             bind:position
             let:loading
-            bind:success={positionSuccess}
+            bind:success={success}
             let:error
             let:notSupported
         >
@@ -163,7 +177,7 @@
                 {#if loading}
                     Loading...
                 {/if}
-                {#if positionSuccess}
+                {#if success}
                     Success!
                 {/if}
                 {#if error}
@@ -172,17 +186,34 @@
             {/if}
         </Geolocation>
 
-        <p class="break-words">Coordinates: {coords}</p>
+        <p class="break-words text-left">Coordinates: {coords}</p>
         <!-- Objects cannot be directly rendered, use JSON.stringify() to convert it to a string -->
-        <p class="break-words">Position: {JSON.stringify(position)}</p>
+        <p class="break-words text-left">Position: {JSON.stringify(position)}</p>
     </div>
 
+    <hr class="my-4">
+
+    <!-- This section demonstrates how to get automatically updated user location -->
+    <div class="mx-4 text-center">
+        <h1 class="font-bold">Automatically updated position when moving</h1>
+
+        <Geolocation
+            getPosition={true}
+            options={geolocationOptions}
+            watch={true}
+            on:position={(e) => {
+                detail = e.detail
+            }}
+        />
+
+        <p class="break-words text-left">detail: {JSON.stringify(detail)}</p>
+    </div>
+
+    <!-- This section demonstrates how to make a web map using MapLibre -->
     <!-- More basemap options -->
     <!-- "https://basemaps.cartocdn.com/gl/positron-gl-style/style.json" -->
     <!-- "https://tiles.basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json" -->
     <!-- "https://tiles.basemaps.cartocdn.com/gl/voyager-gl-style/style.json" -->
-
-    <!-- bind:variable associates the parameter with the variable with the same name declared in <script> reactively -->
     <MapLibre
         center={[144.97, -37.81]}
         class="map flex-grow"
@@ -191,6 +222,7 @@
         bind:bounds
         zoom={14}
     >
+        <!-- Custom control buttons -->
         <Control class="flex flex-col gap-y-2">
             <ControlGroup>
                 <ControlButton
@@ -203,8 +235,11 @@
             </ControlGroup>
         </Control>
 
+        <!-- A map event to add a marker when clicked -->
         <MapEvents on:click={event => addMarker(event, 'Added', 'This is an added marker')} />
 
+        <!-- This is how GeoJSON datasets are rendered -->
+        <!-- promoteId must be a unique ID field in properties of each feature -->
         <GeoJSON
             id="geojsonData"
             data={geojsonData}
@@ -237,6 +272,7 @@
             />
         </GeoJSON>
 
+        <!-- Displaying markers, this is reactive -->
         <!-- For-each loop syntax -->
         <!-- markers is an object, lngLat, label, name are the fields in the object -->
         <!-- i is the index, () indicates the unique ID for each item, duplicate IDs will lead to errors -->

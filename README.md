@@ -48,7 +48,7 @@ This project was created using [`create-svelte`](https://github.com/sveltejs/kit
     pnpm install
     ```
 
-4. Start a development server:
+4. Start a development server and open [http://localhost:5173/](http://localhost:5173/) in a browser:
 
     ```bash
     pnpm run dev

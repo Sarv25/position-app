@@ -35,6 +35,7 @@ This project was created using [`create-svelte`](https://github.com/sveltejs/kit
 ## Developing
 
 1. Fork this repository to your own GitHub account, **DO NOT** change the repository name `position-app`.
+
 2. Clone the repository to your machine.
 
     ```bash
@@ -52,6 +53,7 @@ This project was created using [`create-svelte`](https://github.com/sveltejs/kit
     ```bash
     pnpm run dev
     ```
+
 5. After modifying and validating code changes, add, commit and push to your remote repository:
 
     ```bash
@@ -62,9 +64,17 @@ This project was created using [`create-svelte`](https://github.com/sveltejs/kit
 
 ## Deploying
 
-1. Edit `gh-pages-deploy.sh` (Linux & Mac) or `gh-pages-deploy.bat` (Windows) and change `zjjdes` in the repository address to your GitHub username.
-2. If you are using Windows, change `"deploy": "sh gh-pages-deploy.sh"` in `package.json` to `"deploy": "cmd /c gh-pages-deploy.bat"`.
-3. Build and deploy by running `pnpm run deploy`.
-   - If deployment does not work, copy and run the content of the `gh-pages-deploy` script line by line.
-4. Only after the first deployment, go to the repository settings on GitHub, then to the Pages tab. Select the `gh-pages` branch as the publishing source and click on Save.
-5. Your web application will be available at _https://<your_username>.github.io/position-app/_ **after a few minutes**.
+1. Build project:
+
+    ```bash
+    pnpm run build
+    ```
+
+2. Deploy project to GitHub pages:
+
+    ```bash
+    pnpm run deploy
+    ```
+
+3. Only after the first deployment, go to the repository settings on GitHub, then to the Pages tab. Select the `gh-pages` branch as the publishing source and click on Save.
+4. Your web application will be available at _https://<your_username>.github.io/position-app/_ **after a few minutes**.

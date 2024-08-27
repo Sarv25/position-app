@@ -3,6 +3,11 @@
     import { base } from '$app/paths' // DoNotChange
 </script>
 
+<!-- Website title -->
+<svelte:head>
+    <title>Position App</title>
+</svelte:head>
+
 <!-- Header -->
 <!-- HTML <a href="{base}/"></a> tag for routing -->
 <div class="navbar bg-base-300">

@@ -1,5 +1,6 @@
 <!-- <script> tag includes JavaScript code -->
 <script>
+    import { onMount } from 'svelte'
     import {
         Control,
         ControlButton,
@@ -19,7 +20,6 @@
      * You can put functions you need for multiple components in a js file in
      * the lib folder, export them in lib/index.js and then import them like this
      */
-    import { onMount } from 'svelte'
     import { getMapBounds } from '$lib'
 
     /**
@@ -29,6 +29,7 @@
      *
      * Note the format of markers
      */
+
     let markers = [
         {
             lngLat: {
@@ -60,16 +61,17 @@
     let bounds = getMapBounds(markers)
 
     // Geolocation API related
-    const geolocationOptions = {
+    const options = {
         enableHighAccuracy: true,
         timeout: 10000, // milliseconds
         maximumAge: 0, // milliseconds, 0 disables cached positions
     }
     let getPosition = false
     let success = false
+    let error = ''
     let position = {}
     let coords = []
-    let detail = {}
+    let watchedPosition = {}
 
     /**
      * $: indicates a reactive statement, meaning that this block of code is
@@ -78,6 +80,13 @@
      * In this case: whenever success is set to true, a Position object
      * has been successfully obtained. Immediately update the relevant variables
      */
+    $: {
+        if (success || error) {
+            // reset the flag
+            getPosition = false
+        }
+    }
+
     $: {
         if (success) {
             coords = [position.coords.longitude, position.coords.latitude]
@@ -89,10 +98,6 @@
                     name: 'This is the current position',
                 }
             ]
-
-            // reset the flags
-            getPosition = false
-            success = false
         }
     }
 
@@ -101,6 +106,7 @@
      *
      * Functions declared in <script> can only be used in this component
      */
+
     function addMarker(e, label, name) {
         markers = [
             ...markers,
@@ -117,6 +123,7 @@
      * WARNING: this can lead to errors if the variable is used before being
      * assigned a value
      */
+
     let geojsonData
 
     /**
@@ -152,7 +159,7 @@
         <!-- () => {} is an arrow function, almost equivalent to function foo() {} -->
         <button
             class="btn btn-neutral"
-            on:click={() => (getPosition = true)}
+            on:click={() => { getPosition = true }}
         >
             Get geolocation
         </button>
@@ -163,11 +170,11 @@
         <!-- let:variable creates a variable for use from the component's return -->
         <Geolocation
             {getPosition}
-            options={geolocationOptions}
+            options={options}
             bind:position
             let:loading
             bind:success
-            let:error
+            bind:error
             let:notSupported
         >
             <!-- If-else block syntax -->
@@ -181,7 +188,7 @@
                     Success!
                 {/if}
                 {#if error}
-                    An error occurred. {error.code} {error.message}
+                    An error occurred. Error code {error.code}: {error.message}.
                 {/if}
             {/if}
         </Geolocation>
@@ -199,14 +206,14 @@
 
         <Geolocation
             getPosition={true}
-            options={geolocationOptions}
+            options={options}
             watch={true}
             on:position={(e) => {
-                detail = e.detail
+                watchedPosition = e.detail
             }}
         />
 
-        <p class="break-words text-left">detail: {JSON.stringify(detail)}</p>
+        <p class="break-words text-left">watchedPosition: {JSON.stringify(watchedPosition)}</p>
     </div>
 
     <!-- This section demonstrates how to make a web map using MapLibre -->

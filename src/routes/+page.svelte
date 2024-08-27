@@ -216,7 +216,7 @@
     <!-- "https://tiles.basemaps.cartocdn.com/gl/voyager-gl-style/style.json" -->
     <MapLibre
         center={[144.97, -37.81]}
-        class="map flex-grow"
+        class="map flex-grow min-h-[500px]"
         standardControls
         style="https://tiles.basemaps.cartocdn.com/gl/voyager-gl-style/style.json"
         bind:bounds

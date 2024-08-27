@@ -139,10 +139,11 @@
      * WARNING: it is bad practice to put large data files in the project as
      * they will make the loading of the application very slow, here it is done
      * for demonstration only. The proper way is to use a URL to the file hsoted
-     * on a remote server.
+     * on a remote server. Try this by replacing 'melbourne.geojson' with
+     * 'https://raw.githubusercontent.com/codeforgermany/click_that_hood/main/public/data/melbourne.geojson'
      */
     onMount(async () => {
-        const response = await fetch('property-boundaries.geojson')
+        const response = await fetch('melbourne.geojson')
         geojsonData = await response.json()
     })
 </script>
@@ -250,7 +251,7 @@
         <GeoJSON
             id="geojsonData"
             data={geojsonData}
-            promoteId="property_id"
+            promoteId="name"
         >
             <FillLayer
                 paint={{
@@ -267,7 +268,7 @@
                     {@const props = data?.properties}
                     {#if props}
                         <div class="flex flex-col gap-2">
-                            <p>{props.address}</p>
+                            <p>{props.name}</p>
                         </div>
                     {/if}
                 </Popup>

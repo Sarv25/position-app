@@ -18,8 +18,20 @@ This project was created using [`create-svelte`](https://github.com/sveltejs/kit
 2. Most of the information you will need for development can be found in the documentations of the involved libraries linked above.
 3. Eslint is enabled by default, which will perform syntax and format checking. To take advantage of automatic formatting, use VSCode.
 4. Lines with the comment `\\ DoNotChange` should not be modified, unless you know what you are doing.
-5. Some browsers such as those Chromium-based (e.g., Chrome, Edge, Brave) does not allow repeated requests of location if it believes it is unnecessary. Meaning that retrieving the location might be slow or unsuccessful if a similar request has just been made. **Firefox** does not have this limitation.
-6. Altitude and accuracy information from the Geolocation API is only available on mobile devices. On computers, only the longitude and latitude are available.
+
+## Geolocation API
+
+### Available positioning information
+
+Geolocation API only provides latitudes and longitudes in desktop browsers. Altitudes are only available on smartphones. In addition, the `enableHighAccuracy` option will acquire more precise positioning using GNSS on smartphones if possible, which does not work on desktops.
+### Use cases
+
+There are two ways of using the Geolocation API, both are demonstrated in this template:
+
+1. Obtaining the current position in a single request.
+2. Watch the user position and update when it moves. The only difference in the code is to set `watch` to `true` in the `<Geolocation>` component.
+
+You need to decide which one to use based your use cases, i.e., whether you only need to obtain the position once or track it continuously. **Note that some browsers, such as those Chromium based (e.g., Chrome, Edge, Brave), do not allow repeated Geolocation API requests when the position has not changed.** This means that making multiple such requests at the same location will result in timeouts in these browsers. **Firefox** does not have this limitation. Nonetheless, if you are making repeated requests instead of using the `watch` option, you are probably doing it wrong!
 
 ## Prerequisites
 

@@ -24,6 +24,7 @@ This project was created using [`create-svelte`](https://github.com/sveltejs/kit
 ### Available positioning information
 
 Geolocation API only provides latitudes and longitudes in desktop browsers. Altitudes are only available on smartphones. In addition, the `enableHighAccuracy` option will acquire more precise positioning using GNSS on smartphones if possible, which does not work on desktops.
+
 ### Use cases
 
 There are two ways of using the Geolocation API, both are demonstrated in this template:
@@ -31,7 +32,11 @@ There are two ways of using the Geolocation API, both are demonstrated in this t
 1. Obtaining the current position in a single request.
 2. Watch the user position and update when it moves. The only difference in the code is to set `watch` to `true` in the `<Geolocation>` component.
 
-You need to decide which one to use based your use cases, i.e., whether you only need to obtain the position once or track it continuously. **Note that some browsers, such as those Chromium based (e.g., Chrome, Edge, Brave), do not allow repeated Geolocation API requests when the position has not changed.** This means that making multiple such requests at the same location will result in timeouts in these browsers. **Firefox** does not have this limitation. Nonetheless, if you are making repeated requests instead of using the `watch` option, you are probably doing it wrong!
+You need to decide which one to use based your use cases, i.e., whether you only need to obtain the position once or track it continuously.
+
+**Note that for the first option, some browsers, such as those Chromium based (e.g., Chrome, Edge, Brave), do not allow repeated Geolocation API requests when the position has not changed.** This means that making multiple such requests at the same location will result in timeouts or extremely long waiting in these browsers. **Firefox** does not have this limitation.
+
+Nonetheless, if you are making repeated requests instead of using the `watch` option, you are probably doing it wrong!
 
 ## Prerequisites
 

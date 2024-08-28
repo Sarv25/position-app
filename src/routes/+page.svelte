@@ -63,7 +63,7 @@
     // Geolocation API related
     const options = {
         enableHighAccuracy: true,
-        timeout: 10000, // milliseconds
+        timeout: Infinity, // milliseconds
         maximumAge: 0, // milliseconds, 0 disables cached positions
     }
     let getPosition = false
@@ -71,6 +71,8 @@
     let error = ''
     let position = {}
     let coords = []
+
+    let watchPosition = false
     let watchedPosition = {}
 
     /**
@@ -153,7 +155,7 @@
 <!-- This section demonstrates how to get the current user location -->
 <div class="flex flex-col h-[calc(100vh-80px)] w-full">
     <div class="mx-4 text-center">
-        <h1 class="font-bold">Click button to get a one-time current position</h1>
+        <h1 class="font-bold">Click button to get a one-time current position and add it to the map</h1>
 
         <!-- on:click declares what to do when the button is clicked -->
         <!-- In the HTML part, {} tells the framework to treat what's inside as code (variables or functions), instead of as strings -->
@@ -197,6 +199,8 @@
         <p class="break-words text-left">Coordinates: {coords}</p>
         <!-- Objects cannot be directly rendered, use JSON.stringify() to convert it to a string -->
         <p class="break-words text-left">Position: {JSON.stringify(position)}</p>
+
+        <div class="text-center font-medium text-red-500">Note that in some browsers, you cannot repeatedly request the current location. If you need to continuously update the location, use the watch option below.</div>
     </div>
 
     <hr class="my-4">
@@ -205,8 +209,15 @@
     <div class="mx-4 text-center">
         <h1 class="font-bold">Automatically updated position when moving</h1>
 
+        <button
+            class="btn btn-neutral"
+            on:click={() => { watchPosition = true }}
+        >
+            Start watching
+        </button>
+
         <Geolocation
-            getPosition={true}
+            getPosition={watchPosition}
             options={options}
             watch={true}
             on:position={(e) => {

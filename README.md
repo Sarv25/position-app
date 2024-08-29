@@ -2,7 +2,9 @@
 
 This project is a template for creating your positioning web application/game.
 
-This project uses the following frameworks and libraries:
+This project was created using [`create-svelte`](https://github.com/sveltejs/kit/tree/main/packages/create-svelte).
+
+This project uses the following frameworks and libraries, click the links for their documentations:
 
 1. [SvelteKit](https://kit.svelte.dev/docs/introduction): framework
 2. [TailwindCSS](https://tailwindcss.com/): CSS but (much) easier to use
@@ -10,14 +12,17 @@ This project uses the following frameworks and libraries:
 4. [Svelte-Geolocation](https://github.com/metonym/svelte-geolocation): Geolocation API wrapper for Svelte
 5. [Svelte-MapLibre](https://github.com/dimfeld/svelte-maplibre): MapLibre wrapper for Svelte
 
-This project was created using [`create-svelte`](https://github.com/sveltejs/kit/tree/main/packages/create-svelte).
+More resources:
+
+1. [A collection of potentially useful geospatial libraries](https://github.com/joewdavies/awesome-frontend-gis)
+2. [Geolib: Library to provide basic geospatial operations](https://github.com/manuelbieh/geolib)
 
 ## Before use
 
 1. This project uses JavaScript with type checking **disabled** to avoid excessive type engineering. This, however, leaves the application vulnerable to type-related errors. If you are a serious web developer, consider enabling JSDoc or using TypeScript for type checking.
 2. Most of the information you will need for development can be found in the documentations of the involved libraries linked above.
 3. Eslint is enabled by default, which will perform syntax and format checking. To take advantage of automatic formatting, use VSCode.
-4. Lines with the comment `\\ DoNotChange` should not be modified, unless you know what you are doing.
+4. Lines with the comment `DoNotChange` should not be modified, unless you know what you are doing.
 
 ## Geolocation API
 

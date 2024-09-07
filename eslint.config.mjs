@@ -1,9 +1,5 @@
 import antfu from '@antfu/eslint-config'
 
-// import { FlatCompat } from '@eslint/eslintrc'
-
-// const compat = new FlatCompat()
-
 export default antfu(
     {
     // Enable stylistic formatting rules
@@ -17,14 +13,8 @@ export default antfu(
             // braceStyle: '1tbs', // doesn't work somehow
             // commaDangle: 'only-multiline', // doesn't work somehow
         },
-
-        // Language support
         typescript: true,
         svelte: true,
-        // jsonc: false,
-        // yaml: false,
-
-        // `.eslintignore` is no longer supported in Flat config, use `ignores` instead
         ignores: [
             './fixtures',
             '.DS_Store',
@@ -41,16 +31,6 @@ export default antfu(
             'bun.lockb',
         ],
     },
-
-    // Legacy config
-    // ...compat.config({
-    //   extends: [
-    //     'eslint:recommended',
-    //     // Other extends...
-    //   ]
-    // }),
-
-    // Other flat configs...
     {
         rules: {
             'style/brace-style': [

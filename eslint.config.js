@@ -40,13 +40,13 @@ export default antfu(
             ],
             'style/comma-dangle': [
                 'warn',
-                'only-multiline' // 'always-multiline', 'only-multiline', 'always', 'never'
+                'only-multiline', // 'always-multiline', 'only-multiline', 'always', 'never'
             ],
             'linebreak-style': ['error', 'unix'],
             'curly': ['warn', 'all'],
             'style/max-statements-per-line': ['warn', { max: 2 }],
             'no-console': 'off',
-        }
+        },
     },
     {
         files: ['**/*.svelte'],
@@ -59,16 +59,16 @@ export default antfu(
                 'error',
                 {
                     multiline: 1,
-                    singleline: 1
-                }
+                    singleline: 1,
+                },
             ],
             'svelte/first-attribute-linebreak': [
                 'error',
                 {
                     multiline: 'below',
-                    singleline: 'beside'
-                }
+                    singleline: 'beside',
+                },
             ],
         },
-    }
+    },
 )

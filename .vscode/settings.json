@@ -10,18 +10,18 @@
     },
 
     // Silent the stylistic rules in you IDE, but still auto fix them
-    // "eslint.rules.customizations": [
-    //     { "rule": "style/*", "severity": "off" },
-    //     { "rule": "format/*", "severity": "off" },
-    //     { "rule": "*-indent", "severity": "off" },
-    //     { "rule": "*-spacing", "severity": "off" },
-    //     { "rule": "*-spaces", "severity": "off" },
-    //     { "rule": "*-order", "severity": "off" },
-    //     { "rule": "*-dangle", "severity": "off" },
-    //     { "rule": "*-newline", "severity": "off" },
-    //     { "rule": "*quotes", "severity": "off" },
-    //     { "rule": "*semi", "severity": "off" }
-    // ],
+    "eslint.rules.customizations": [
+        { "rule": "style/*", "severity": "warn", "fixable": true },
+        { "rule": "format/*", "severity": "warn", "fixable": true },
+        { "rule": "*-indent", "severity": "warn", "fixable": true },
+        { "rule": "*-spacing", "severity": "warn", "fixable": true },
+        { "rule": "*-spaces", "severity": "warn", "fixable": true },
+        { "rule": "*-order", "severity": "warn", "fixable": true },
+        { "rule": "*-dangle", "severity": "warn", "fixable": true },
+        { "rule": "*-newline", "severity": "warn", "fixable": true },
+        { "rule": "*quotes", "severity": "warn", "fixable": true },
+        { "rule": "*semi", "severity": "warn", "fixable": true }
+    ],
 
     // Enable eslint for all supported languages
     "eslint.validate": [
@@ -30,12 +30,20 @@
         "typescript",
         "typescriptreact",
         "vue",
-        "svelte",
         "html",
         "markdown",
         "json",
         "jsonc",
         "yaml",
-        "toml"
+        "toml",
+        "xml",
+        "gql",
+        "graphql",
+        "astro",
+        "css",
+        "less",
+        "scss",
+        "pcss",
+        "postcss"
     ]
 }

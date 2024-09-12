@@ -6,7 +6,7 @@ This project was created using [`create-svelte`](https://github.com/sveltejs/kit
 
 This project uses the following frameworks and libraries, click the links for their documentations:
 
-1. [SvelteKit](https://kit.svelte.dev/docs/introduction): framework
+1. [SvelteKit](https://kit.svelte.dev/docs/introduction) / [Svelte](https://svelte.dev/docs): framework
 2. [TailwindCSS](https://tailwindcss.com/): CSS but (much) easier to use
 3. [DaisyUI](https://daisyui.com/): UI library based on TailwindCSS
 4. [Svelte-Geolocation](https://github.com/metonym/svelte-geolocation): Geolocation API wrapper for Svelte

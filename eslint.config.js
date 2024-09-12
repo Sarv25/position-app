@@ -2,16 +2,16 @@ import antfu from '@antfu/eslint-config'
 
 export default antfu(
     {
-    // Enable stylistic formatting rules
-    // stylistic: true,
-
+        // Enable stylistic formatting rules
+        // stylistic: true,
         // Or customize the stylistic rules
         stylistic: {
-            indent: 4, // 4, or 'tab'
-            quotes: 'single', // or 'double'
-            semi: false,
-            // braceStyle: '1tbs', // doesn't work somehow
-            // commaDangle: 'only-multiline', // doesn't work somehow
+            'indent': 4, // 4, or 'tab'
+            'quotes': 'single', // or 'double'
+            'semi': false,
+            'linebreak-style': ['error', 'unix'],
+            'brace-style': '1tbs',
+            'comma-dangle': 'only-multiline',
         },
         typescript: true,
         svelte: true,
@@ -42,7 +42,6 @@ export default antfu(
                 'warn',
                 'only-multiline', // 'always-multiline', 'only-multiline', 'always', 'never'
             ],
-            'linebreak-style': ['error', 'unix'],
             'curly': ['warn', 'all'],
             'style/max-statements-per-line': ['warn', { max: 2 }],
             'no-console': 'off',

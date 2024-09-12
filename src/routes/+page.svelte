@@ -1,20 +1,20 @@
 <!-- <script> tag includes JavaScript code -->
 <script>
     import { onMount } from 'svelte'
+    import Geolocation from 'svelte-geolocation'
     import {
         Control,
         ControlButton,
         ControlGroup,
         FillLayer,
         GeoJSON,
+        hoverStateFilter,
         LineLayer,
         MapEvents,
         MapLibre,
         Marker,
-        Popup,
-        hoverStateFilter
-    } from 'svelte-maplibre'
-    import Geolocation from 'svelte-geolocation' // DoNotChange
+        Popup
+    } from 'svelte-maplibre' // DoNotChange
 
     /**
      * You can put functions you need for multiple components in a js file in
@@ -139,9 +139,7 @@
      *
      * Asset files (e.g., data files, images) can be put in static folder
      *
-     * WARNING: it is bad practice to put large data files in the project as
-     * they will make the loading of the application very slow, here it is done
-     * for demonstration only. The proper way is to use a URL to the file hsoted
+     * Another way to load data files is to use a URL to the file hosted
      * on a remote server. Try this by replacing 'melbourne.geojson' with
      * 'https://raw.githubusercontent.com/codeforgermany/click_that_hood/main/public/data/melbourne.geojson'
      */

@@ -30,6 +30,7 @@
         "typescript",
         "typescriptreact",
         "vue",
+        "svelte",
         "html",
         "markdown",
         "json",

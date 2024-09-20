@@ -6,6 +6,7 @@
         Control,
         ControlButton,
         ControlGroup,
+        DefaultMarker,
         FillLayer,
         GeoJSON,
         hoverStateFilter,
@@ -20,7 +21,7 @@
      * You can put functions you need for multiple components in a js file in
      * the lib folder, export them in lib/index.js and then import them like this
      */
-    import { getMapBounds } from '$lib'
+    import { getDistance, getMapBounds } from '$lib'
 
     /**
      * Declare variables
@@ -33,24 +34,24 @@
     let markers = [
         {
             lngLat: {
-                lng: 144.98,
-                lat: -37.805,
+                lng: 144.9638347277324,
+                lat: -37.80967960080751,
             },
             label: 'Marker 1',
             name: 'This is a marker',
         },
         {
             lngLat: {
-                lng: 144.98,
-                lat: -37.81,
+                lng: 144.96318039790924,
+                lat: -37.808357984258315,
             },
             label: 'Marker 2',
             name: 'This is a marker',
         },
         {
             lngLat: {
-                lng: 144.96,
-                lat: -37.81,
+                lng: 144.96280297287632,
+                lat: -37.80668719932231,
             },
             label: 'Marker 3',
             name: 'This is a marker',
@@ -59,49 +60,6 @@
 
     // Extent of the map
     let bounds = getMapBounds(markers)
-
-    // Geolocation API related
-    const options = {
-        enableHighAccuracy: true,
-        timeout: Infinity, // milliseconds
-        maximumAge: 0, // milliseconds, 0 disables cached positions
-    }
-    let getPosition = false
-    let success = false
-    let error = ''
-    let position = {}
-    let coords = []
-
-    let watchPosition = false
-    let watchedPosition = {}
-
-    /**
-     * $: indicates a reactive statement, meaning that this block of code is
-     * executed whenever the variable used as the condition changes its value
-     *
-     * In this case: whenever success is set to true, a Position object
-     * has been successfully obtained. Immediately update the relevant variables
-     */
-    $: {
-        if (success || error) {
-            // reset the flag
-            getPosition = false
-        }
-    }
-
-    $: {
-        if (success) {
-            coords = [position.coords.longitude, position.coords.latitude]
-            markers = [
-                ...markers,
-                {
-                    lngLat: { lng: coords[0], lat: coords[1] },
-                    label: 'Current',
-                    name: 'This is the current position',
-                },
-            ]
-        }
-    }
 
     /**
      * Declaring a function
@@ -118,6 +76,72 @@
                 name,
             },
         ]
+    }
+
+    // Geolocation API related
+    const options = {
+        enableHighAccuracy: true,
+        timeout: Infinity, // milliseconds
+        maximumAge: 0, // milliseconds, 0 disables cached positions
+    }
+    let getPosition = false
+    let success = false
+    let error = ''
+    let position = {}
+    let coords = []
+
+    /**
+     * $: indicates a reactive statement, meaning that this block of code is
+     * executed whenever the variable used as the condition changes its value
+     *
+     * In this case: whenever success is set to true, a Position object
+     * has been successfully obtained. Immediately update the relevant variables
+     */
+    $: if (success || error) {
+        // reset the flag
+        getPosition = false
+    }
+
+    $: if (success) {
+        coords = [position.coords.longitude, position.coords.latitude]
+        markers = [
+            ...markers,
+            {
+                lngLat: { lng: coords[0], lat: coords[1] },
+                label: 'Current',
+                name: 'This is the current position',
+            },
+        ]
+    }
+
+    // Watch a position using Geolocation API if you need continuous updates
+    let watchPosition = false
+    let watchedPosition = {}
+    let watchedMarker = {}
+
+    /**
+     * Trigger an action when getting close to a marker
+     */
+    let count = 0 // number of markers found
+    $: if (watchedPosition.coords) { // this block is triggered when watchedPosition is updated
+        // The tracked position in marker format
+        watchedMarker = {
+            lngLat: {
+                lng: watchedPosition.coords.longitude,
+                lat: watchedPosition.coords.latitude,
+            },
+        }
+
+        // Whenever the watched position is updated, check if it is within 10 meters of any marker
+        markers.forEach((marker) => {
+            const distance = getDistance([watchedMarker, marker])
+
+            const threshold = 10
+
+            if (distance <= threshold) {
+                count += 1
+            }
+        })
     }
 
     /**
@@ -154,8 +178,8 @@
 <!-- This section demonstrates how to get the current user location -->
 <div class="flex flex-col h-[calc(100vh-80px)] w-full">
     <!-- grid, grid-cols-#, col-span-#, md:xxxx are some Tailwind utilities you can use for responsive design -->
-    <div class="grid grid-cols-3">
-        <div class="col-span-3 md:col-span-1 text-center">
+    <div class="grid grid-cols-4">
+        <div class="col-span-4 md:col-span-1 text-center">
             <h1 class="font-bold">Click button to get a one-time current position and add it to the map</h1>
 
             <!-- on:click declares what to do when the button is clicked -->
@@ -205,7 +229,7 @@
         </div>
 
         <!-- This section demonstrates how to get automatically updated user location -->
-        <div class="col-span-3 md:col-span-1 text-center">
+        <div class="col-span-4 md:col-span-1 text-center">
             <h1 class="font-bold">Automatically updated position when moving</h1>
 
             <button
@@ -227,7 +251,7 @@
             <p class="break-words text-left">watchedPosition: {JSON.stringify(watchedPosition)}</p>
         </div>
 
-        <div class="col-span-3 md:col-span-1 text-center">
+        <div class="col-span-4 md:col-span-1 text-center">
             <h1 class="font-bold">Toggle Melbourne Suburbs</h1>
 
             <button
@@ -236,6 +260,12 @@
             >
                 Toggle
             </button>
+        </div>
+
+        <div class="col-span-4 md:col-span-1 text-center">
+            <h1 class="font-bold">Found {count} markers</h1>
+
+            The count will go up by one each time you are within 10 meters of a marker.
         </div>
     </div>
 
@@ -326,6 +356,15 @@
                 </Popup>
             </Marker>
         {/each}
+
+        <!-- Display the watched position as a marker -->
+        {#if watchedMarker.lngLat}
+            <DefaultMarker lngLat={watchedMarker.lngLat}>
+                <Popup offset={[0, -10]}>
+                    <div class="text-lg font-bold">You</div>
+                </Popup>
+            </DefaultMarker>
+        {/if}
     </MapLibre>
 </div>
 

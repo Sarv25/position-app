@@ -8,9 +8,9 @@ const config = {
         adapter: adapter(),
         paths: {
             base: process.env.NODE_ENV === 'production' ? '/position-app' : '',
-        }
+        },
     },
-    preprocess: vitePreprocess()
+    preprocess: vitePreprocess(),
 }
 
 export default config

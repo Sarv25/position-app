@@ -13,7 +13,7 @@
         MapEvents,
         MapLibre,
         Marker,
-        Popup
+        Popup,
     } from 'svelte-maplibre' // DoNotChange
 
     /**
@@ -37,7 +37,7 @@
                 lat: -37.805,
             },
             label: 'Marker 1',
-            name: 'This is a marker'
+            name: 'This is a marker',
         },
         {
             lngLat: {
@@ -45,7 +45,7 @@
                 lat: -37.81,
             },
             label: 'Marker 2',
-            name: 'This is a marker'
+            name: 'This is a marker',
         },
         {
             lngLat: {
@@ -53,8 +53,8 @@
                 lat: -37.81,
             },
             label: 'Marker 3',
-            name: 'This is a marker'
-        }
+            name: 'This is a marker',
+        },
     ]
 
     // Extent of the map
@@ -98,7 +98,7 @@
                     lngLat: { lng: coords[0], lat: coords[1] },
                     label: 'Current',
                     name: 'This is the current position',
-                }
+                },
             ]
         }
     }
@@ -116,7 +116,7 @@
                 lngLat: e.detail.lngLat,
                 label,
                 name,
-            }
+            },
         ]
     }
 

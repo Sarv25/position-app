@@ -33,15 +33,6 @@ export default antfu(
     },
     {
         rules: {
-            'style/brace-style': [
-                'warn',
-                '1tbs', // '1tbs', 'stroustrup', 'allman'
-                { allowSingleLine: true },
-            ],
-            'style/comma-dangle': [
-                'warn',
-                'only-multiline', // 'always-multiline', 'only-multiline', 'always', 'never'
-            ],
             'curly': ['warn', 'all'],
             'style/max-statements-per-line': ['warn', { max: 2 }],
             'no-console': 'off',

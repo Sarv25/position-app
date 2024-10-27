@@ -224,6 +224,8 @@
     let showbicycle_route = false
     let road
     let showroad = false
+    let biodivpolygon
+    let showbiodivpolygon = false
     let style = 'https://tiles.basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json'
 
     onMount(async () => {
@@ -242,6 +244,15 @@
         const response = await fetch('road.geojson')
         road = await response.json()
     })
+    onMount(async () => {
+        const response = await fetch('biodivpolygon.geojson')
+        biodivpolygon = await response.json()
+    })
+    onMount(() => {
+        createDataset() // Call the dataset creation function
+        localStorage.setItem('poiDataset', JSON.stringify(dataset))
+    })
+
 </script>
 <div class="flex flex-col h-[calc(100vh-80px)] w-full">
     <!-- grid, grid-cols-#, col-span-#, md:xxxx are some Tailwind utilities you can use for responsive design -->
@@ -355,6 +366,16 @@
                 Click
             </button>
         </div>
+        <div class="col-span-4 md:col-span-1 text-center">
+            <h1 class="font-bold">Toggle biodivpolygon</h1>
+
+            <button
+                class="btn btn-neutral"
+                on:click={() => { showbiodivpolygon = !showbiodivpolygon }}
+            >
+                Toggle
+            </button>
+        </div>
         <div class="col-span-4 text-center">
             <h1 class="font-bold">Found {count} markers</h1>
             <p>The count will go up by one each time you are within 10 meters of a marker.</p>
@@ -387,11 +408,7 @@
                 Click here to check road
             </button>
         </div>
-        <div class="col-span-4 md:col-span-1 text-center">
-            <h1 class="font-bold">Found {count} markers</h1>
-
-            The count will go up by one each time you are within 10 meters of a marker.
-        </div>
+        <button on:click={downloadDataset}>Download Dataset</button>
     </div>
 
     <!-- This section demonstrates how to make a web map using MapLibre -->
@@ -503,6 +520,40 @@
                 </Popup>
             </GeoJSON>
         {/if}
+        {#if showbiodivpolygon}
+            <GeoJSON
+                id="biodivpolygon"
+                data={biodivpolygon}
+                promoteId="polygon_id"
+            >
+                <FillLayer
+                    paint={{
+                        'fill-color': hoverStateFilter('green', 'yellow'),
+                        'fill-opacity': 0.3,
+                    }}
+                    beforeLayerType="symbol"
+                    manageHoverState
+                >
+                    <Popup
+                        openOn="hover"
+                        let:data
+                    >
+                        {@const props = data?.properties}
+                        {#if props}
+                            <div class="flex flex-col gap-2">
+                                <p>{props.name}</p>
+                            </div>
+                        {/if}
+                    </Popup>
+                </FillLayer>
+                <LineLayer
+                    layout={{ 'line-cap': 'round', 'line-join': 'round' }}
+                    paint={{ 'line-color': 'white', 'line-width': 3 }}
+                    beforeLayerType="symbol"
+                />
+            </GeoJSON>
+        {/if}
+
         <!-- Displaying markers, this is reactive -->
         <!-- For-each loop syntax -->
         <!-- markers is an object, lngLat, label, name are the fields in the object -->
@@ -510,7 +561,7 @@
         {#each markers as { lngLat, label, name }, i (i)}
             <Marker
                 {lngLat}
-                class="grid h-8 w-14 place-items-center rounded-md border
+                class="grid h-12 w-24 place-items-center rounded-md border
                     border-gray-200 bg-red-300 text-black shadow-2xl
                     focus:outline-2 focus:outline-black"
             >

@@ -182,6 +182,9 @@
         const response = await fetch(`https://api.weatherapi.com/v1/current.json?key=2faec65baed44b68acd111824242610&q=${lat},${lon}`)
         return await response.json()
     }
+    // Weather data is powered by WeatherAPI.com
+    // API details: https://www.weatherapi.com/my/
+    // API Key: 2faec65baed44b68acd111824242610
 
     async function checkCurrentWeather() {
         weatherInfo = await fetchWeatherData(-37.8136, 144.9631)

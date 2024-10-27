@@ -248,10 +248,6 @@
         const response = await fetch('biodivpolygon.geojson')
         biodivpolygon = await response.json()
     })
-    onMount(() => {
-        createDataset() // Call the dataset creation function
-        localStorage.setItem('poiDataset', JSON.stringify(dataset))
-    })
 
 </script>
 <div class="flex flex-col h-[calc(100vh-80px)] w-full">
@@ -408,7 +404,6 @@
                 Click here to check road
             </button>
         </div>
-        <button on:click={downloadDataset}>Download Dataset</button>
     </div>
 
     <!-- This section demonstrates how to make a web map using MapLibre -->

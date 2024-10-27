@@ -10,7 +10,7 @@
 
 <!-- Header -->
 <!-- HTML <a href="{base}/"></a> tag for routing -->
-<div class="navbar bg-base-300">
+<div class="navbar bg-green-600">
     <a
         class="btn btn-ghost text-xl"
         href="{base}/"

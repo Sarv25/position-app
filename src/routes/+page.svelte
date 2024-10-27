@@ -56,6 +56,134 @@
             label: 'Marker 3',
             name: 'This is a marker',
         },
+        {
+            lngLat: {
+                lng: 144.9717383224767,
+                lat: -37.803284097096956,
+            },
+            label: 'Marker 4',
+            name: 'Melbourne Museum',
+        },
+        {
+            lngLat: {
+                lng: 144.9656282506281,
+                lat: -37.802673745787104,
+            },
+            label: 'Marker 5',
+            name: 'Argyle Square',
+        },
+        {
+            lngLat: {
+                lng: 144.95397137079547,
+                lat: -37.78980433144111,
+            },
+            label: 'Marker 6',
+            name: 'Royal Park',
+        },
+        {
+            lngLat: {
+                lng: 144.98297141414045,
+                lat: -37.78735397173653,
+            },
+            label: 'Marker 7',
+            name: 'Edinburgh Gardens',
+        },
+        {
+            lngLat: {
+                lng: 144.9627475592528,
+                lat: -37.80225836544848,
+            },
+            label: 'Marker 8',
+            name: 'Licoln Square',
+        },
+        {
+            lngLat: {
+                lng: 144.9817697854466,
+                lat: -37.84131937258544,
+            },
+            label: 'Marker 9',
+            name: 'Fawkner Park',
+        },
+        {
+            lngLat: {
+                lng: 144.92724584357123,
+                lat: -37.836909200670476,
+            },
+            label: 'Marker 10',
+            name: 'Port Melbourne',
+        },
+        {
+            lngLat: {
+                lng: 144.9501009455486,
+                lat: -37.78354049074126,
+            },
+            label: 'Marker 11',
+            name: 'Melbourne Zoo',
+        },
+        {
+            lngLat: {
+                lng: 144.90739613731589,
+                lat: -37.78638984192456,
+            },
+            label: 'Marker 12',
+            name: 'Flemington Racecourse',
+        },
+        {
+            lngLat: {
+                lng: 144.96100276706855,
+                lat: -37.798344272443856,
+            },
+            label: 'Marker 13',
+            name: 'University of Melbounre',
+        },
+        {
+            lngLat: {
+                lng: 144.95424896508666,
+                lat: -37.81050019842236,
+            },
+            label: 'Marker 14',
+            name: 'Flagstaff Gardens',
+        },
+        {
+            lngLat: {
+                lng: 144.96280297287632,
+                lat: -37.80668719932231,
+            },
+            label: 'Marker 15',
+            name: 'Marvel Stadium',
+        },
+        {
+            lngLat: {
+                lng: 144.9834313984615,
+                lat: -37.81961159201031,
+            },
+            label: 'Marker 16',
+            name: 'Melbourne Cricket Ground',
+        },
+        {
+            lngLat: {
+                lng: 144.9890747661773,
+                lat: -37.8129921701347,
+            },
+            label: 'Marker 17',
+            name: 'Darling Sqaure',
+        },
+        {
+            lngLat: {
+                lng: 144.99403148796972,
+                lat: -37.78842477466465,
+            },
+            label: 'Marker 18',
+            name: 'Mayors Park',
+        },
+        {
+            lngLat: {
+                lng: 144.9613514535756,
+                lat: -37.78494839648465,
+            },
+            label: 'Marker 19',
+            name: 'Princess Park',
+        },
     ]
 
     // Extent of the map
@@ -81,7 +209,7 @@
     // Geolocation API related
     const options = {
         enableHighAccuracy: true,
-        timeout: Infinity, // milliseconds
+        timeout: 10000, // milliseconds
         maximumAge: 0, // milliseconds, 0 disables cached positions
     }
     let getPosition = false
@@ -89,6 +217,38 @@
     let error = ''
     let position = {}
     let coords = []
+    const accuracyThreshold = 15
+    let showPopup = false
+    let watchPosition = false
+    let watchedPosition = {}
+
+    // Function to get position and check accuracy
+    function checkPosition() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(successCallback, errorCallback, options) // CHANGE HERE
+        }
+        else {
+            errorMessage = 'Geolocation is not supported by this browser.'
+        }
+    }
+
+    // Success callback
+    function successCallback(pos) {
+        position = pos
+        // Check if the accuracy is above the threshold
+        if (pos.coords.accuracy > accuracyThreshold) { // CHANGE HERE
+            showPopup = true // Show popup if not GNSS-based // CHANGE HERE
+        }
+        else {
+            showPopup = false
+        }
+    }
+
+    // Error callback
+    function errorCallback(error) {
+        errorMessage = `Error occurred: ${error.message}`
+        showPopup = true // Show popup if an error occurred // CHANGE HERE
+    }
 
     /**
      * $: indicates a reactive statement, meaning that this block of code is
@@ -115,8 +275,7 @@
     }
 
     // Watch a position using Geolocation API if you need continuous updates
-    let watchPosition = false
-    let watchedPosition = {}
+
     let watchedMarker = {}
 
     /**
@@ -152,6 +311,11 @@
 
     let showGeoJSON = false
     let geojsonData
+    let bicycle_route
+    let showbicycle_route = false
+    let road
+    let showroad = false
+    let style = 'https://tiles.basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json'
 
     /**
      * onMount is executed immediately after the component is mounted, it can be
@@ -171,12 +335,31 @@
         const response = await fetch('melbourne.geojson')
         geojsonData = await response.json()
     })
+    // Check position when the page loads
+    onMount(() => {
+        checkPosition() // CHANGE HERE
+    })
+    onMount(async () => {
+        const response = await fetch('bicycle_route.geojson')
+        bicycle_route = await response.json()
+    })
+    onMount(async () => {
+        const response = await fetch('road.geojson')
+        road = await response.json()
+    })
 </script>
 
 <!-- Everything after <script> will be HTML for rendering -->
 
 <!-- This section demonstrates how to get the current user location -->
 <div class="flex flex-col h-[calc(100vh-80px)] w-full">
+    <!-- Popup shown when accuracy is low (non-GNSS source) -->
+    {#if showPopup} <!-- Add this part in your HTML -->
+        <div class="popup bg-red-500 text-white p-4 rounded">
+            <p>Warning: Your location is being determined using Wi-Fi or another source, not GNSS. This may affect accuracy.</p>
+        </div>
+    {/if}
+
     <!-- grid, grid-cols-#, col-span-#, md:xxxx are some Tailwind utilities you can use for responsive design -->
     <div class="grid grid-cols-4">
         <div class="col-span-4 md:col-span-1 text-center">
@@ -250,8 +433,20 @@
 
             <p class="break-words text-left">watchedPosition: {JSON.stringify(watchedPosition)}</p>
         </div>
+        <div class="col-span-3 md:col-span-1 text-center">
+            <h1 class="font-bold">Switch Basemap</h1>
 
-        <div class="col-span-4 md:col-span-1 text-center">
+            <!-- Dropdown to change the basemap -->
+
+            <select
+                class="select"
+                bind:value={style}>
+                <option value="https://basemaps.cartocdn.com/gl/positron-gl-style/style.json">Positron</option>
+                <option value="https://basemaps.cartocdn.com/gl/voyager-gl-style/style.json">Voyager</option>
+                <option value="https://tiles.basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json">Dark Matter</option>
+            </select>
+        </div>
+        <div class="col-span-3 md:col-span-1 text-center">
             <h1 class="font-bold">Toggle Melbourne Suburbs</h1>
 
             <button
@@ -267,6 +462,26 @@
 
             The count will go up by one each time you are within 10 meters of a marker.
         </div>
+        <div class="col-span-3 md:col-span-1 text-center">
+            <h1 class="font-bold"> bicycle_route</h1>
+
+            <button
+                class="btn btn-neutral"
+                on:click={() => { showbicycle_route = !showbicycle_route }}
+            >
+                Click here to check bicycle route
+            </button>
+        </div>
+        <div class="col-span-3 md:col-span-1 text-center">
+            <h1 class="font-bold"> road </h1>
+
+            <button
+                class="btn btn-neutral"
+                on:click={() => { showroad = !showroad }}
+            >
+                Click here to check road
+            </button>
+        </div>
     </div>
 
     <!-- This section demonstrates how to make a web map using MapLibre -->
@@ -278,7 +493,7 @@
         center={[144.97, -37.81]}
         class="map flex-grow min-h-[500px]"
         standardControls
-        style="https://tiles.basemaps.cartocdn.com/gl/voyager-gl-style/style.json"
+        {style}
         bind:bounds
         zoom={14}
     >
@@ -333,6 +548,52 @@
                 />
             </GeoJSON>
         {/if}
+        <!-- Add Bicycle Route GeoJSON layer -->
+        {#if showbicycle_route}
+            <GeoJSON
+                id="bicycleRoutes"
+                data={bicycle_route}
+                promoteId="route_id">
+                <LineLayer
+                    layout={{ 'line-cap': 'round', 'line-join': 'round' }}
+                    paint={{ 'line-color': 'green', 'line-width': 2 }}
+                    beforeLayerType="symbol" />
+                <Popup
+                    openOn="hover"
+                    let:data>
+                    {@const props = data?.properties}
+                    {#if props}
+                        <div class="flex flex-col gap-2">
+                            <p>Route Name: {props.name}</p>
+                            <p>Distance: {props.distance} km</p>
+                        </div>
+                    {/if}
+                </Popup>
+            </GeoJSON>
+        {/if}
+        <!-- Add Road GeoJSON layer -->
+        {#if showroad}
+            <GeoJSON
+                id="Road"
+                data={road}
+                promoteId="road_id">
+                <LineLayer
+                    layout={{ 'line-cap': 'round', 'line-join': 'round' }}
+                    paint={{ 'line-color': 'red', 'line-width': 3 }}
+                    beforeLayerType="symbol" />
+                <Popup
+                    openOn="hover"
+                    let:data>
+                    {@const props = data?.properties}
+                    {#if props}
+                        <div class="flex flex-col gap-2">
+                            <p>Route Name: {props.name}</p>
+                            <p>Distance: {props.distance} km</p>
+                        </div>
+                    {/if}
+                </Popup>
+            </GeoJSON>
+        {/if}
 
         <!-- Displaying markers, this is reactive -->
         <!-- For-each loop syntax -->
@@ -365,7 +626,40 @@
                 </Popup>
             </DefaultMarker>
         {/if}
+        <!-- User Location Marker (Custom Triangle Marker) -->
+        {#if coords.length}
+            <Marker lngLat={coords}>
+                <div class="user-location-marker"></div> <!-- Triangle Marker -->
+                <Popup offset={[0, -10]}>
+                    <div class="text-lg font-bold">You are here</div>
+                </Popup>
+            </Marker>
+        {/if}
     </MapLibre>
 </div>
+<!-- Optional CSS for Popup -->
+<style>
+    .popup {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        z-index: 1000;
+        background-color: rgba(255, 0, 0, 0.8);
+        padding: 10px;
+        border-radius: 5px;
+        color: white;
+    }
+
+    /* CSS for the custom marker */
+    .user-location-marker {
+        width: 0;
+        height: 0;
+        border-left: 10px solid transparent;
+        border-right: 10px solid transparent;
+        position: absolute;
+        border-bottom: 20px solid rgb(0, 98, 255); /* Triangle color */
+        transform: Translate(-50%, -50%); /* Pointing the triangle upwards */
+    } /* Added missing closing brace */
+</style>
 
 <!-- Optionally, you can have a <style> tag for CSS at the end, but with TailwindCSS it is usually not necessary -->

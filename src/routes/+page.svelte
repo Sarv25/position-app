@@ -1,7 +1,8 @@
-<!-- <script> tag includes JavaScript code -->
 <script>
+    import { getDistance, getMapBounds } from '$lib'
     import { onMount } from 'svelte'
     import Geolocation from 'svelte-geolocation'
+
     import {
         Control,
         ControlButton,
@@ -15,203 +16,120 @@
         MapLibre,
         Marker,
         Popup,
-    } from 'svelte-maplibre' // DoNotChange
-
-    /**
-     * You can put functions you need for multiple components in a js file in
-     * the lib folder, export them in lib/index.js and then import them like this
-     */
-    import { getDistance, getMapBounds } from '$lib'
-
-    /**
-     * Declare variables
-     * let decalres an immutable variable
-     * const declares a constant
-     *
-     * Note the format of markers
-     */
+    } from 'svelte-maplibre'
 
     let markers = [
         {
-            lngLat: {
-                lng: 144.9638347277324,
-                lat: -37.80967960080751,
-            },
-            label: 'Marker 1',
-            name: 'This is a marker',
+            lngLat: { lng: 144.9638347277324, lat: -37.80967960080751 },
+            name: 'Take a photo of Federation Square’s iconic architecture',
+            label: 'Federation Square',
         },
         {
-            lngLat: {
-                lng: 144.96318039790924,
-                lat: -37.808357984258315,
-            },
-            label: 'Marker 2',
-            name: 'This is a marker',
+            lngLat: { lng: 144.969995, lat: -37.817221 },
+            name: 'Reach Flinders Street Station in under 5 minutes for a bonus',
+            label: 'Flinders Street Station',
         },
         {
-            lngLat: {
-                lng: 144.96280297287632,
-                lat: -37.80668719932231,
-            },
-            label: 'Marker 3',
-            name: 'This is a marker',
+            lngLat: { lng: 144.984661, lat: -37.819611 },
+            name: 'Cycle safely around the Melbourne Cricket Ground perimeter',
+            label: 'Melbourne Cricket Ground',
         },
         {
-            lngLat: {
-                lng: 144.9717383224767,
-                lat: -37.803284097096956,
-            },
-            label: 'Marker 4',
-            name: 'Melbourne Museum',
+            lngLat: { lng: 144.9717383224767, lat: -37.803284097096956 },
+            name: 'Visit Melbourne Museum and identify 3 artifacts for bonus points',
+            label: 'Melbourne Museum',
         },
         {
-            lngLat: {
-                lng: 144.9656282506281,
-                lat: -37.802673745787104,
-            },
-            label: 'Marker 5',
-            name: 'Argyle Square',
+            lngLat: { lng: 144.9656282506281, lat: -37.802673745787104 },
+            name: 'Relax in Argyle Square and capture a scenic photo',
+            label: 'Argyle Square',
         },
         {
-            lngLat: {
-                lng: 144.95397137079547,
-                lat: -37.78980433144111,
-            },
-            label: 'Marker 6',
-            name: 'Royal Park',
+            lngLat: { lng: 144.95397137079547, lat: -37.78980433144111 },
+            name: 'Observe local wildlife in Royal Park without disturbing them',
+            label: 'Royal Park',
         },
         {
-            lngLat: {
-                lng: 144.98297141414045,
-                lat: -37.78735397173653,
-            },
-            label: 'Marker 7',
-            name: 'Edinburgh Gardens',
+            lngLat: { lng: 144.98297141414045, lat: -37.78735397173653 },
+            name: 'Do a quick lap around Edinburgh Gardens and earn a health bonus',
+            label: 'Edinburgh Gardens',
         },
         {
-            lngLat: {
-                lng: 144.9627475592528,
-                lat: -37.80225836544848,
-            },
-            label: 'Marker 8',
-            name: 'Licoln Square',
+            lngLat: { lng: 144.9627475592528, lat: -37.80225836544848 },
+            name: 'Find a quiet spot in Lincoln Square and meditate for 5 minutes',
+            label: 'Lincoln Square',
         },
         {
-            lngLat: {
-                lng: 144.9817697854466,
-                lat: -37.84131937258544,
-            },
-            label: 'Marker 9',
-            name: 'Fawkner Park',
+            lngLat: { lng: 144.9817697854466, lat: -37.84131937258544 },
+            name: 'Navigate Fawkner Park bike trails to earn a safety bonus',
+            label: 'Fawkner Park',
         },
         {
-            lngLat: {
-                lng: 144.92724584357123,
-                lat: -37.836909200670476,
-            },
-            label: 'Marker 10',
-            name: 'Port Melbourne',
+            lngLat: { lng: 144.92724584357123, lat: -37.836909200670476 },
+            name: 'Take a photo of the sunset at Port Melbourne Beach',
+            label: 'Port Melbourne Beach',
         },
         {
-            lngLat: {
-                lng: 144.9501009455486,
-                lat: -37.78354049074126,
-            },
-            label: 'Marker 11',
-            name: 'Melbourne Zoo',
+            lngLat: { lng: 144.9501009455486, lat: -37.78354049074126 },
+            name: 'Cycle to Melbourne Zoo and identify 3 animal exhibits',
+            label: 'Melbourne Zoo',
         },
         {
-            lngLat: {
-                lng: 144.90739613731589,
-                lat: -37.78638984192456,
-            },
-            label: 'Marker 12',
-            name: 'Flemington Racecourse',
+            lngLat: { lng: 144.90739613731589, lat: -37.78638984192456 },
+            name: 'Arrive at Flemington Racecourse before noon for bonus points',
+            label: 'Flemington Racecourse',
         },
         {
-            lngLat: {
-                lng: 144.96100276706855,
-                lat: -37.798344272443856,
-            },
-            label: 'Marker 13',
-            name: 'University of Melbounre',
+            lngLat: { lng: 144.96100276706855, lat: -37.798344272443856 },
+            name: 'Visit University of Melbourne and learn one fact for extra points',
+            label: 'University of Melbourne',
         },
         {
-            lngLat: {
-                lng: 144.95424896508666,
-                lat: -37.81050019842236,
-            },
-            label: 'Marker 14',
-            name: 'Flagstaff Gardens',
+            lngLat: { lng: 144.95424896508666, lat: -37.81050019842236 },
+            name: 'Take a break at Flagstaff Gardens and earn a stamina boost',
+            label: 'Flagstaff Gardens',
         },
         {
-            lngLat: {
-                lng: 144.96280297287632,
-                lat: -37.80668719932231,
-            },
-            label: 'Marker 15',
-            name: 'Marvel Stadium',
+            lngLat: { lng: 144.94702, lat: -37.8206 },
+            name: 'Check out Docklands’ artwork and capture a picture',
+            label: 'Docklands',
         },
         {
-            lngLat: {
-                lng: 144.9834313984615,
-                lat: -37.81961159201031,
-            },
-            label: 'Marker 16',
-            name: 'Melbourne Cricket Ground',
+            lngLat: { lng: 144.9834313984615, lat: -37.81961159201031 },
+            name: 'Cycle through the Royal Botanic Gardens safely to earn rewards',
+            label: 'Royal Botanic Gardens',
         },
         {
-            lngLat: {
-                lng: 144.9890747661773,
-                lat: -37.8129921701347,
-            },
-            label: 'Marker 17',
-            name: 'Darling Sqaure',
+            lngLat: { lng: 144.9890747661773, lat: -37.8129921701347 },
+            name: 'Cycle to Darling Square and find a unique landmark',
+            label: 'Darling Square',
         },
         {
-            lngLat: {
-                lng: 144.99403148796972,
-                lat: -37.78842477466465,
-            },
-            label: 'Marker 18',
-            name: 'Mayors Park',
+            lngLat: { lng: 144.99403148796972, lat: -37.78842477466465 },
+            name: 'Pause at Mayor’s Park and take a scenic shot of the trees',
+            label: 'Mayor’s Park',
         },
         {
-            lngLat: {
-                lng: 144.9613514535756,
-                lat: -37.78494839648465,
-            },
-            label: 'Marker 19',
-            name: 'Princess Park',
+            lngLat: { lng: 144.9613514535756, lat: -37.78494839648465 },
+            name: 'Take a lap around Princes Park in under 3 minutes for speed bonus',
+            label: 'Princes Park',
         },
+        {
+            lngLat: { lng: 144.978728, lat: -37.821164 },
+            name: 'Visit the Shrine of Remembrance and pay respects for extra points',
+            label: 'Shrine of Remembrance',
+        },
+
     ]
 
-    // Extent of the map
-    let bounds = getMapBounds(markers)
-
-    /**
-     * Declaring a function
-     *
-     * Functions declared in <script> can only be used in this component
-     */
-
-    function addMarker(e, label, name) {
-        markers = [
-            ...markers,
-            {
-                lngLat: e.detail.lngLat,
-                label,
-                name,
-            },
-        ]
-    }
-
-    // Geolocation API related
+    // Define the options variable for geolocation
     const options = {
         enableHighAccuracy: true,
         timeout: 10000, // milliseconds
         maximumAge: 0, // milliseconds, 0 disables cached positions
     }
+
+    let bounds = getMapBounds(markers)
     let getPosition = false
     let success = false
     let error = ''
@@ -249,16 +167,27 @@
         errorMessage = `Error occurred: ${error.message}`
         showPopup = true // Show popup if an error occurred // CHANGE HERE
     }
+    let weatherInfo = {}
+    let showWeather = false
 
-    /**
-     * $: indicates a reactive statement, meaning that this block of code is
-     * executed whenever the variable used as the condition changes its value
-     *
-     * In this case: whenever success is set to true, a Position object
-     * has been successfully obtained. Immediately update the relevant variables
-     */
+    // Define the addMarker function
+    function addMarker(event, label, name) {
+        markers = [
+            ...markers,
+            { lngLat: event.detail.lngLat, label, name },
+        ]
+    }
+
+    async function fetchWeatherData(lat, lon) {
+        const response = await fetch(`https://api.weatherapi.com/v1/current.json?key=2faec65baed44b68acd111824242610&q=${lat},${lon}`)
+        return await response.json()
+    }
+
+    async function checkCurrentWeather() {
+        weatherInfo = await fetchWeatherData(-37.8136, 144.9631)
+        showWeather = true
+    }
     $: if (success || error) {
-        // reset the flag
         getPosition = false
     }
 
@@ -268,46 +197,26 @@
             ...markers,
             {
                 lngLat: { lng: coords[0], lat: coords[1] },
-                label: 'Current',
+                label: 'Current Position',
                 name: 'This is the current position',
             },
         ]
     }
-
-    // Watch a position using Geolocation API if you need continuous updates
-
     let watchedMarker = {}
+    let count = 0
 
-    /**
-     * Trigger an action when getting close to a marker
-     */
-    let count = 0 // number of markers found
-    $: if (watchedPosition.coords) { // this block is triggered when watchedPosition is updated
-        // The tracked position in marker format
+    $: if (watchedPosition.coords) {
         watchedMarker = {
-            lngLat: {
-                lng: watchedPosition.coords.longitude,
-                lat: watchedPosition.coords.latitude,
-            },
+            lngLat: { lng: watchedPosition.coords.longitude, lat: watchedPosition.coords.latitude },
         }
-
-        // Whenever the watched position is updated, check if it is within 10 meters of any marker
         markers.forEach((marker) => {
             const distance = getDistance([watchedMarker, marker])
-
             const threshold = 10
-
             if (distance <= threshold) {
                 count += 1
             }
         })
     }
-
-    /**
-     * Variables can be initialised without a value and populated later
-     * WARNING: this can lead to errors if the variable is used before being
-     * assigned a value
-     */
 
     let showGeoJSON = false
     let geojsonData
@@ -317,20 +226,6 @@
     let showroad = false
     let style = 'https://tiles.basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json'
 
-    /**
-     * onMount is executed immediately after the component is mounted, it can be
-     * used to load large datasets or to execute code required after the page
-     * has been loaded
-     *
-     * async/await indicate an asynchronous function (i.e., program is paused
-     * when a line marked with await starts and resumes when it is resolved)
-     *
-     * Asset files (e.g., data files, images) can be put in static folder
-     *
-     * Another way to load data files is to use a URL to the file hosted
-     * on a remote server. Try this by replacing 'melbourne.geojson' with
-     * 'https://raw.githubusercontent.com/codeforgermany/click_that_hood/main/public/data/melbourne.geojson'
-     */
     onMount(async () => {
         const response = await fetch('melbourne.geojson')
         geojsonData = await response.json()
@@ -348,11 +243,8 @@
         road = await response.json()
     })
 </script>
-
-<!-- Everything after <script> will be HTML for rendering -->
-
-<!-- This section demonstrates how to get the current user location -->
 <div class="flex flex-col h-[calc(100vh-80px)] w-full">
+    <!-- grid, grid-cols-#, col-span-#, md:xxxx are some Tailwind utilities you can use for responsive design -->
     <!-- Popup shown when accuracy is low (non-GNSS source) -->
     {#if showPopup} <!-- Add this part in your HTML -->
         <div class="popup bg-red-500 text-white p-4 rounded">
@@ -360,7 +252,6 @@
         </div>
     {/if}
 
-    <!-- grid, grid-cols-#, col-span-#, md:xxxx are some Tailwind utilities you can use for responsive design -->
     <div class="grid grid-cols-4">
         <div class="col-span-4 md:col-span-1 text-center">
             <h1 class="font-bold">Click button to get a one-time current position and add it to the map</h1>
@@ -446,7 +337,7 @@
                 <option value="https://tiles.basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json">Dark Matter</option>
             </select>
         </div>
-        <div class="col-span-3 md:col-span-1 text-center">
+        <div class="col-span-4 md:col-span-1 text-center">
             <h1 class="font-bold">Toggle Melbourne Suburbs</h1>
 
             <button
@@ -456,12 +347,26 @@
                 Toggle
             </button>
         </div>
-
         <div class="col-span-4 md:col-span-1 text-center">
-            <h1 class="font-bold">Found {count} markers</h1>
-
-            The count will go up by one each time you are within 10 meters of a marker.
+            <h1 class="font-bold">Check Current Weather</h1>
+            <button
+                class="btn btn-neutral px-6 py-3 text-center"
+                on:click={checkCurrentWeather}>
+                Click
+            </button>
         </div>
+        <div class="col-span-4 text-center">
+            <h1 class="font-bold">Found {count} markers</h1>
+            <p>The count will go up by one each time you are within 10 meters of a marker.</p>
+        </div>
+        {#if showWeather}
+            <div class="weather-info text-center font-bold p-4 bg-blue-100 rounded-md my-4">
+                <h2>Weather Information (Melbourne)</h2>
+                <p>Temperature: {weatherInfo.current?.temp_c}°C</p>
+                <p>Humidity: {weatherInfo.current?.humidity}%</p>
+                <p>Wind Speed: {weatherInfo.current?.wind_kph} km/h</p>
+            </div>
+        {/if}
         <div class="col-span-3 md:col-span-1 text-center">
             <h1 class="font-bold"> bicycle_route</h1>
 
@@ -481,6 +386,11 @@
             >
                 Click here to check road
             </button>
+        </div>
+        <div class="col-span-4 md:col-span-1 text-center">
+            <h1 class="font-bold">Found {count} markers</h1>
+
+            The count will go up by one each time you are within 10 meters of a marker.
         </div>
     </div>
 
@@ -548,7 +458,6 @@
                 />
             </GeoJSON>
         {/if}
-        <!-- Add Bicycle Route GeoJSON layer -->
         {#if showbicycle_route}
             <GeoJSON
                 id="bicycleRoutes"
@@ -594,7 +503,6 @@
                 </Popup>
             </GeoJSON>
         {/if}
-
         <!-- Displaying markers, this is reactive -->
         <!-- For-each loop syntax -->
         <!-- markers is an object, lngLat, label, name are the fields in the object -->
@@ -635,9 +543,9 @@
                 </Popup>
             </Marker>
         {/if}
+
     </MapLibre>
 </div>
-<!-- Optional CSS for Popup -->
 <style>
     .popup {
         position: absolute;
@@ -661,5 +569,4 @@
         transform: Translate(-50%, -50%); /* Pointing the triangle upwards */
     } /* Added missing closing brace */
 </style>
-
 <!-- Optionally, you can have a <style> tag for CSS at the end, but with TailwindCSS it is usually not necessary -->

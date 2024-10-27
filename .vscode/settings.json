@@ -46,5 +46,6 @@
         "scss",
         "pcss",
         "postcss"
-    ]
+    ],
+    "CodeGPT.apiKey": "CodeGPT Plus Beta"
 }
